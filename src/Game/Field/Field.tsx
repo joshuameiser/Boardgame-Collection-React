@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import classes from "./Field.module.css";
 import Stone from "../Stone/Stone";
 
@@ -34,9 +34,16 @@ const Field: any = () => {
 
 	const [player1, changePlayer1Name] = useState("Player 1");
 	const [player2, changePlayer2Name] = useState("Player 2");
-	const defaultMessage = `${playerOne ? player1 : player2} is now playing`;
+	let defaultMessage = `${playerOne ? player1 : player2} is now playing`;
 	const [message, changeMessage] = useState(defaultMessage);
 	const [gameOver, changeGameState] = useState(false);
+
+	useEffect(() => {
+		if (!gameOver) {
+			defaultMessage = `${playerOne ? player1 : player2} is now playing`;
+			changeMessage(defaultMessage);
+		}
+	}, [playerOne, player1, player2]);
 
 	const clickedHandler = (key: string) => {
 		if (gameOver) {
@@ -46,13 +53,10 @@ const Field: any = () => {
 			const index2: number = Number(index[1]);
 			let fieldArray = [...field];
 			let player;
-			let playerName;
 			if (playerOne) {
 				player = 1;
-				playerName = { player1 };
 			} else {
 				player = 2;
-				playerName = { player2 };
 			}
 			for (let i = height - 1; i >= 0; i--) {
 				if (fieldArray[i][index2] === 0) {
@@ -67,7 +71,6 @@ const Field: any = () => {
 					} else {
 						let activePlayer = !playerOne;
 						switchPlayer(activePlayer);
-						changeMessage(`${activePlayer ? player1 : player2} is now playing`);
 					}
 					updateField(fieldArray);
 
@@ -201,7 +204,6 @@ const Field: any = () => {
 		} else {
 			switchPlayer(true);
 		}
-		changeMessage(`${player1} is now playing`);
 	};
 
 	const height = field.length;
@@ -236,16 +238,18 @@ const Field: any = () => {
 				onClick={() => {
 					changePlayer1Name(player1Ref.current.value);
 					changePlayer2Name(player2Ref.current.value);
-					changeMessage(
-						`${
-							playerOne ? player1Ref.current.value : player2Ref.current.value
-						} is now playing`
-					);
 				}}>
 				Change Names to input
 			</button>
 		</div>
 	);
+	console.log(player1Ref.current.value);
+	// useEffect(() => {
+	// 	if (!gameOver) {
+	// 		defaultMessage = `${playerOne ? player1 : player2} is now playing`;
+	// 		changeMessage(defaultMessage);
+	// 	}
+	// }, [player1Ref.current.value]);
 
 	return (
 		<div className={classes.field}>
