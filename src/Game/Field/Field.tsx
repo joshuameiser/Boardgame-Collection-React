@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
+import FieldSVG from "./FieldSVG";
 import classes from "./Field.module.css";
-import Stone from "../Stone/Stone";
 
 const Field: any = () => {
 	let fieldArray: Array<Array<number>> = [
@@ -13,24 +13,6 @@ const Field: any = () => {
 	];
 	const [field, updateField] = useState(fieldArray);
 	const [playerOne, switchPlayer] = useState(true);
-
-	let fieldVisual: JSX.Element[] = field.map((row, index) => {
-		let key1 = index.toString();
-		return (
-			<div>
-				{row.map((element, index) => {
-					let key = key1 + index.toString();
-					return (
-						<div className={classes.outer} onClick={() => clickedHandler(key)}>
-							<div className={classes.inner}>
-								{element === 0 ? null : <Stone value={element} key={key} />}
-							</div>
-						</div>
-					);
-				})}
-			</div>
-		);
-	});
 
 	const [player1, changePlayer1Name] = useState("Player 1");
 	const [player2, changePlayer2Name] = useState("Player 2");
@@ -209,9 +191,6 @@ const Field: any = () => {
 	const height = field.length;
 	const width = field[0].length;
 
-	const player1Ref: any = React.useRef(null);
-	const player2Ref: any = React.useRef(null);
-
 	const playerSelect = (
 		<div>
 			<label htmlFor="player1">Player 1:</label>
@@ -220,7 +199,8 @@ const Field: any = () => {
 				id="player1"
 				name="player1"
 				placeholder={player1}
-				ref={player1Ref}
+				// value={player1}
+				onChange={(e: any) => changePlayer1Name(e.target.value)}
 			/>
 			<br />
 			<br />
@@ -230,32 +210,16 @@ const Field: any = () => {
 				id="player2"
 				name="player2"
 				placeholder={player2}
-				ref={player2Ref}
+				onChange={(e: any) => changePlayer2Name(e.target.value)}
 			/>
-			<br />
-			<br />
-			<button
-				onClick={() => {
-					changePlayer1Name(player1Ref.current.value);
-					changePlayer2Name(player2Ref.current.value);
-				}}>
-				Change Names to input
-			</button>
 		</div>
 	);
-	console.log(player1Ref.current.value);
-	// useEffect(() => {
-	// 	if (!gameOver) {
-	// 		defaultMessage = `${playerOne ? player1 : player2} is now playing`;
-	// 		changeMessage(defaultMessage);
-	// 	}
-	// }, [player1Ref.current.value]);
 
 	return (
 		<div className={classes.field}>
 			{playerSelect}
 			<h2>{message}</h2>
-			{fieldVisual}
+			<FieldSVG field={field} clicked={clickedHandler} />
 			<button onClick={resetHandler}>Reset the game!</button>
 		</div>
 	);
