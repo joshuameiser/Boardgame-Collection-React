@@ -1,6 +1,8 @@
 import React from "react";
 import classes from "./Field.module.css";
 import BG from "../images/BG.webp";
+import Cover1 from "../images/stoneCover1.webp";
+import Cover2 from "../images/stoneCover2.webp";
 
 const FieldSVG = (props: {
 	field: Array<Array<number>>;
@@ -13,11 +15,19 @@ const FieldSVG = (props: {
 				{row.map((element, index) => {
 					let key = key1 + index.toString();
 					let player: string;
+					let fill: string;
+
 					if (element === 1) {
 						player = classes.Player1;
+						fill = "url(#cover1)";
 					} else if (element === 2) {
 						player = classes.Player2;
-					} else player = "";
+						fill = "url(#cover2)";
+						fill = "red";
+					} else {
+						player = "";
+						fill = "black";
+					}
 
 					return (
 						<circle
@@ -26,7 +36,7 @@ const FieldSVG = (props: {
 							r="25"
 							cx={25 + 60 * index}
 							cy={25 + 60 * key1}
-							fill="black"
+							fill={fill}
 							onClick={() => props.clicked(key)}></circle>
 					);
 				})}
@@ -45,6 +55,22 @@ const FieldSVG = (props: {
 				<title>Board</title>
 				<defs>
 					<rect id="path-1" x="0" y="0" width="520" height="504"></rect>
+					<g>
+						<pattern
+							id="cover1"
+							patternUnits="objectBoundingBox"
+							width="100%"
+							height="100%">
+							<image href={Cover1} x="0" y="0" width="100%" height="100%" />
+						</pattern>
+						<pattern
+							id="cover2"
+							patternUnits="objectBoundingBox"
+							width="100%"
+							height="100%">
+							<image href={Cover2} x="0" y="0" width="100%" height="100%" />
+						</pattern>
+					</g>
 					<pattern
 						id="pattern-2"
 						patternUnits="objectBoundingBox"
